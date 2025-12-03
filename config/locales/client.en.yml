@@ -1,0 +1,4 @@
+en:
+  js:
+    user_consent:
+      confirmation_failed: "We couldn't save your confirmation. Please try again."

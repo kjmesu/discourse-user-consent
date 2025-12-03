@@ -1,0 +1,57 @@
+.user-consent-modal {
+  backdrop-filter: blur(5px) brightness(0.8);
+
+  .user-consent-modal__header {
+    width: 100%;
+    text-align: center;
+
+    h3 {
+      margin: 0;
+      font-weight: 600;
+    }
+  }
+
+  .user-consent-modal__body {
+    text-align: left;
+
+    p + p {
+      margin-top: 1em;
+    }
+
+    li:not(:last-child) {
+      margin-bottom: 0.12em;
+    }
+  }
+
+  .modal-footer {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+  }
+
+  .user-consent-modal__checkbox {
+    flex: 1;
+    min-width: 0;
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+      cursor: pointer;
+      font-size: var(--font-down-1);
+
+      input[type="checkbox"] {
+        margin: 0;
+        cursor: pointer;
+        flex-shrink: 0;
+      }
+    }
+  }
+
+  .user-consent-modal__actions {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0.5em;
+    flex-shrink: 0;
+  }
+}

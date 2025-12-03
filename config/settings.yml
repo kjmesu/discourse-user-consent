@@ -1,0 +1,33 @@
+plugins:
+  user_consent_enabled:
+    default: false
+    client: true
+  user_consent_dialog_title:
+    default: "User consent"
+    client: true
+  user_consent_dialog_body:
+    default: |
+      This community requires your consent to continue.
+      Please confirm that you agree to proceed.
+    client: true
+    type: string
+    textarea: true
+  user_consent_confirm_button_label:
+    default: "I agree"
+    client: true
+  user_consent_decline_button_label:
+    default: "I decline"
+    client: true
+  user_consent_redirect_url:
+    default: "https://www.example.com/"
+    client: true
+  user_consent_reaffirm_days:
+    default: 90
+    client: true
+    min: 1
+  user_consent_require_checkbox:
+    default: false
+    client: true
+  user_consent_checkbox_label:
+    default: "I have read and understood the above"
+    client: true
