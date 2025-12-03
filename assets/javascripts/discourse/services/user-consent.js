@@ -163,11 +163,13 @@ export default class UserConsentService extends Service {
   }
 
   #isAdminRoute() {
-    const routeName = this.router.currentRouteName;
-    if (!routeName) {
-      // If route name isn't available yet, check the URL as a fallback
-      return window.location.pathname.startsWith("/admin");
+    // Check URL first - most reliable method for admin routes
+    if (window.location.pathname.startsWith("/admin")) {
+      return true;
     }
-    return routeName.startsWith("admin");
+
+    // Also check route name for consistency
+    const routeName = this.router.currentRouteName;
+    return routeName?.startsWith("admin") ?? false;
   }
 }
