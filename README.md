@@ -51,6 +51,7 @@ After installation, enable and configure the plugin in your Discourse admin pane
 | `user_consent_reaffirm_days` | Number | `90` | Number of days before logged-in users must re-affirm consent (minimum: 1) |
 | `user_consent_require_checkbox` | Boolean | `false` | Require users to check a checkbox before confirming |
 | `user_consent_checkbox_label` | String | `"I have read and understood the above"` | Label for the optional checkbox |
+| `user_consent_store_ip` | Boolean | `false` | Store the user's IP address when they accept consent |
 
 ## Usage
 
@@ -80,6 +81,17 @@ For a GDPR compliance notice:
 
 Enable `user_consent_require_checkbox` to add a checkbox that users must check before they can confirm their consent. This provides an additional layer of explicit agreement.
 
+#### Storing IP Addresses
+
+Enable `user_consent_store_ip` to record the user's IP address at the time they accept consent. This can be useful for:
+- Compliance auditing and legal requirements
+- Fraud detection and security monitoring
+- Geographic consent tracking
+
+**Privacy Note**: Storing IP addresses is considered personal data under many privacy regulations (GDPR, CCPA, etc.). Ensure you have a legal basis for collecting and storing this information, and that your privacy policy discloses this practice.
+
+The IP address is stored alongside the consent timestamp in the plugin's data store and is only collected for logged-in users when they explicitly accept the consent dialog.
+
 #### Periodic Reaffirmation
 
 Set `user_consent_reaffirm_days` to a positive number to require logged-in users to reconfirm their consent periodically. Set to `0` or leave empty to only require consent once.
@@ -96,6 +108,7 @@ Set `user_consent_reaffirm_days` to a positive number to require logged-in users
 
 - Consent is stored in the Discourse database via PluginStore
 - Includes a timestamp of when consent was given
+- Optionally includes the IP address (if `user_consent_store_ip` is enabled)
 - Persists across sessions and devices
 - Can be configured to expire after a set number of days
 

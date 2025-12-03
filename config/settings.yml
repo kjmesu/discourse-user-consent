@@ -31,3 +31,6 @@ plugins:
   user_consent_checkbox_label:
     default: "I have read and understood the above"
     client: true
+  user_consent_store_ip:
+    default: false
+    client: false

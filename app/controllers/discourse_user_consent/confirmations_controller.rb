@@ -9,7 +9,10 @@ module ::DiscourseUserConsent
     def create
       raise Discourse::InvalidAccess unless SiteSetting.user_consent_enabled
 
-      DiscourseUserConsent.record_confirmation(current_user)
+      DiscourseUserConsent.record_confirmation(
+        current_user,
+        ip_address: request.remote_ip
+      )
 
       render json:
                success_json.merge(

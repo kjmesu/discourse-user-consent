@@ -7,3 +7,6 @@ en:
     user_consent_decline_button_label: "Decline button label"
     user_consent_redirect_url: "URL to redirect visitors to when they decline"
     user_consent_reaffirm_days: "Number of days before logged-in users must re-affirm their consent"
+    user_consent_require_checkbox: "Require users to check a confirmation checkbox before accepting"
+    user_consent_checkbox_label: "Label for the confirmation checkbox"
+    user_consent_store_ip: "Store the user's IP address when they accept consent"

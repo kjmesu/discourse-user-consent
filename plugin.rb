@@ -21,8 +21,10 @@ module ::DiscourseUserConsent
     "user:#{user.id}"
   end
 
-  def self.record_confirmation(user)
-    plugin_store.set(store_key(user), { confirmed_at: Time.zone.now.iso8601 })
+  def self.record_confirmation(user, ip_address: nil)
+    data = { confirmed_at: Time.zone.now.iso8601 }
+    data[:ip_address] = ip_address if ip_address.present? && SiteSetting.user_consent_store_ip
+    plugin_store.set(store_key(user), data)
   end
 
   def self.confirmation(user)
