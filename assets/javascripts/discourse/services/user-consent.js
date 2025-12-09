@@ -4,7 +4,7 @@ import { ajax } from "discourse/lib/ajax";
 import { i18n } from "discourse-i18n";
 import UserConsentModal from "../components/modal/user-consent";
 
-const SESSION_STORAGE_KEY = "discourse-user-consent-confirmed";
+const STORAGE_KEY = "discourse-user-consent-confirmed";
 const MS_IN_DAY = 86_400_000;
 
 export default class UserConsentService extends Service {
@@ -167,7 +167,7 @@ export default class UserConsentService extends Service {
 
   #sessionConfirmed() {
     try {
-      return window.sessionStorage.getItem(SESSION_STORAGE_KEY) === "1";
+      return window.localStorage.getItem(STORAGE_KEY) === "1";
     } catch (error) {
       return false;
     }
@@ -175,7 +175,7 @@ export default class UserConsentService extends Service {
 
   #markSessionConfirmed() {
     try {
-      window.sessionStorage.setItem(SESSION_STORAGE_KEY, "1");
+      window.localStorage.setItem(STORAGE_KEY, "1");
     } catch (error) {
       // ignore, session storage is unavailable
     }
@@ -183,7 +183,7 @@ export default class UserConsentService extends Service {
 
   #clearSessionConfirmation() {
     try {
-      window.sessionStorage.removeItem(SESSION_STORAGE_KEY);
+      window.localStorage.removeItem(STORAGE_KEY);
     } catch (error) {
       // ignore
     }
