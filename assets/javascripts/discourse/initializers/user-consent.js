@@ -18,9 +18,10 @@ export default {
       userConsentService.maybePrompt();
 
       api.onPageChange(() => userConsentService.maybePrompt());
-      api.onAppEvent("current-user:changed", () =>
-        userConsentService.maybePrompt()
-      );
+      api.onAppEvent("current-user:changed", async () => {
+        await userConsentService.migrateAnonymousConsent();
+        userConsentService.maybePrompt();
+      });
     });
   },
 };

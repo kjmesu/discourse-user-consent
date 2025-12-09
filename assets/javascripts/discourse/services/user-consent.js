@@ -82,6 +82,55 @@ export default class UserConsentService extends Service {
     window.location.href = redirect || fallbackPath;
   }
 
+  async migrateAnonymousConsent() {
+    if (!this.currentUser) {
+      return false;
+    }
+
+    if (this.currentUser.user_consent_confirmed_at) {
+      this.#clearSessionConfirmation();
+      return false;
+    }
+
+    if (!this.#sessionConfirmed()) {
+      return false;
+    }
+
+    if (this.isProcessing) {
+      return false;
+    }
+
+    this.isProcessing = true;
+
+    try {
+      const response = await ajax("/user-consent/confirm", {
+        type: "POST",
+      });
+
+      const confirmedAt =
+        response?.confirmed_at ?? new Date().toISOString();
+
+      if (typeof this.currentUser.set === "function") {
+        this.currentUser.set("user_consent_confirmed_at", confirmedAt);
+      } else {
+        this.currentUser.user_consent_confirmed_at = confirmedAt;
+      }
+
+      this.#clearSessionConfirmation();
+
+      // eslint-disable-next-line no-console
+      console.log("user consent migrated from anonymous to authenticated");
+
+      return true;
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error("user consent migration failed", error);
+      return false;
+    } finally {
+      this.isProcessing = false;
+    }
+  }
+
   #needsConfirmation() {
     if (!this.siteSettings.user_consent_enabled) {
       return false;
@@ -129,6 +178,14 @@ export default class UserConsentService extends Service {
       window.sessionStorage.setItem(SESSION_STORAGE_KEY, "1");
     } catch (error) {
       // ignore, session storage is unavailable
+    }
+  }
+
+  #clearSessionConfirmation() {
+    try {
+      window.sessionStorage.removeItem(SESSION_STORAGE_KEY);
+    } catch (error) {
+      // ignore
     }
   }
 
