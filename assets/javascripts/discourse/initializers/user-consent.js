@@ -19,6 +19,8 @@ export default {
 
       api.onPageChange(() => userConsentService.maybePrompt());
       api.onAppEvent("current-user:changed", async () => {
+        // eslint-disable-next-line no-console
+        console.log("current-user:changed event fired");
         await userConsentService.migrateAnonymousConsent();
         userConsentService.maybePrompt();
       });

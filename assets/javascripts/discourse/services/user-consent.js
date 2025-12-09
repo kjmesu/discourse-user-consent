@@ -83,6 +83,14 @@ export default class UserConsentService extends Service {
   }
 
   async migrateAnonymousConsent() {
+    // eslint-disable-next-line no-console
+    console.log("migrateAnonymousConsent called", {
+      hasCurrentUser: !!this.currentUser,
+      hasDbConsent: !!this.currentUser?.user_consent_confirmed_at,
+      hasLocalStorage: this.#sessionConfirmed(),
+      isProcessing: this.isProcessing,
+    });
+
     if (!this.currentUser) {
       return false;
     }
