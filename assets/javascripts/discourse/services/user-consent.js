@@ -18,7 +18,7 @@ export default class UserConsentService extends Service {
 
   #modalPromise = null;
 
-  maybePrompt() {
+  async maybePrompt() {
     if (!this.siteSettings.user_consent_enabled) {
       this.#closeModalIfOpen();
       return;
@@ -27,6 +27,10 @@ export default class UserConsentService extends Service {
     if (this.#isAdminRoute()) {
       this.#closeModalIfOpen();
       return;
+    }
+
+    if (this.currentUser && this.#sessionConfirmed()) {
+      await this.migrateAnonymousConsent();
     }
 
     if (this.#needsConfirmation()) {
