@@ -13,27 +13,6 @@ A configurable user consent gate for Discourse sites that requires visitors to c
 - **Admin Bypass**: Automatically skips consent dialog on admin routes
 - **Background Blur**: Adds visual emphasis by blurring content behind the modal
 
-## Installation
-
-1. Navigate to your Discourse installation directory
-2. Add the plugin to your `containers/app.yml` file:
-
-```yaml
-hooks:
-  after_code:
-    - exec:
-        cd: $home/plugins
-        cmd:
-          - git clone https://github.com/kjm/discourse-user-consent.git
-```
-
-3. Rebuild your Discourse container:
-
-```bash
-cd /var/discourse
-./launcher rebuild app
-```
-
 ## Configuration
 
 After installation, enable and configure the plugin in your Discourse admin panel at **Settings > Plugins > User consent**.
@@ -100,9 +79,10 @@ Set `user_consent_reaffirm_days` to a positive number to require logged-in users
 
 ### For Anonymous Users
 
-- Consent is stored in the browser's session storage
-- Lasts for the duration of the browser session
-- Users must re-consent after closing and reopening the browser
+- Consent is stored in the browser's localStorage
+- Persists across browser sessions and page reloads
+- Automatically migrates to database if user logs in after consenting
+- Users are not prompted again after login if they already consented anonymously
 
 ### For Logged-In Users
 
@@ -112,6 +92,14 @@ Set `user_consent_reaffirm_days` to a positive number to require logged-in users
 - Persists across sessions and devices
 - Can be configured to expire after a set number of days
 
+### Anonymous-to-Authenticated Migration
+
+When an anonymous user who has already consented logs into their account:
+- The plugin automatically detects the localStorage consent
+- Consent is seamlessly migrated to the database
+- localStorage is cleared after successful migration
+- User is not prompted to consent again
+
 ### Technical Details
 
 The plugin:
@@ -120,15 +108,59 @@ The plugin:
 - Stores consent data using Discourse's PluginStore API
 - Provides a REST endpoint at `/user-consent/confirm` for recording confirmations
 - Integrates with Discourse's modal system for a native look and feel
+- Automatically migrates anonymous consent to authenticated users upon login
 
-## Development
+### Debugging
 
-### API Endpoints
+#### Clear All User Consents (Rails Console)
 
-**POST** `/user-consent/confirm`
-- Records user consent confirmation
-- Requires authentication
-- Returns: `{ success: true, confirmed_at: "ISO8601 timestamp" }`
+To clear all stored user consents from the database:
+
+```ruby
+PluginStore.new("discourse-user-consent").remove_all
+```
+
+To clear consent for a specific user:
+
+```ruby
+# By user ID
+user = User.find(123)
+PluginStore.new("discourse-user-consent").remove("user:#{user.id}")
+
+# By username
+user = User.find_by(username: "username")
+PluginStore.new("discourse-user-consent").remove("user:#{user.id}")
+```
+
+#### Clear Consents (Browser Console)
+
+To clear anonymous user consent (localStorage):
+
+```javascript
+localStorage.removeItem("discourse-user-consent-confirmed");
+```
+
+To clear and reload to see the consent modal:
+
+```javascript
+localStorage.removeItem("discourse-user-consent-confirmed");
+location.reload();
+```
+
+To clear consent for the current authenticated user:
+
+```javascript
+// Clear localStorage
+localStorage.removeItem("discourse-user-consent-confirmed");
+
+// Clear from currentUser object
+if (Discourse.currentUser) {
+  Discourse.currentUser.set("user_consent_confirmed_at", null);
+}
+
+// Reload to see modal
+location.reload();
+```
 
 ## License
 
