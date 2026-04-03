@@ -4,7 +4,7 @@ import { action } from "@ember/object";
 import { service } from "@ember/service";
 import { tracked } from "@glimmer/tracking";
 import { cook } from "discourse/lib/text";
-import htmlSafe from "discourse/helpers/html-safe";
+import { htmlSafe } from "@ember/template";
 import DButton from "discourse/components/d-button";
 import DModal from "discourse/components/d-modal";
 
