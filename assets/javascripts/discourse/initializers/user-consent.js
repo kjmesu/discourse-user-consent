@@ -15,8 +15,6 @@ export default {
         return;
       }
 
-      userConsentService.maybePrompt();
-
       api.onPageChange(() => userConsentService.maybePrompt());
       api.onAppEvent("current-user:changed", () =>
         userConsentService.maybePrompt()

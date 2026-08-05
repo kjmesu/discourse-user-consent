@@ -3,7 +3,7 @@
 # name: discourse-user-consent
 # about: Adds a configurable user consent gate for Discourse sites
 # version: 1.0.0
-# authors: kjm
+# authors: GAFSHUB
 # url: https://github.com/kjm/discourse-user-consent
 
 register_asset "stylesheets/common/user-consent.scss"
