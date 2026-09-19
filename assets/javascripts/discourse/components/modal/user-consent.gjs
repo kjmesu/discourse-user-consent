@@ -2,9 +2,9 @@ import Component from "@glimmer/component";
 import { Input } from "@ember/component";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
+import { trustHTML } from "@ember/template";
 import { tracked } from "@glimmer/tracking";
 import { cook } from "discourse/lib/text";
-import { htmlSafe } from "@ember/template";
 import DButton from "discourse/components/d-button";
 import DModal from "discourse/components/d-modal";
 
@@ -71,8 +71,8 @@ export default class UserConsentModal extends Component {
       cook(this.bodyRaw),
     ]);
 
-    this.cookedTitle = htmlSafe(title);
-    this.cookedBody = htmlSafe(body);
+    this.cookedTitle = trustHTML(title);
+    this.cookedBody = trustHTML(body);
   }
 
   <template>
